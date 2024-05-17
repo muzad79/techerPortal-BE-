@@ -18,8 +18,15 @@ export async function addStudent(req,res){
     const {name,subject,marks} = req.body;
 try{
     let student = await getSingleDocument(Student,{name:name,subject:subject})
-    if(student)
-      return res.status(400).json({message:"student already present"})
+    if(student){
+      const updatedStudent = await updateDocument(
+        Student,
+        { _id:student?._id},
+        {name,marks,subject}
+      );
+      return res.status(201).json({message:"Marks updated successfully"})
+
+    }
     createDocument(Student,{name,subject,marks,isDeleted:false})
     return res.status(201).json({message:"student added successfully"})
 }
@@ -38,7 +45,7 @@ export async function editStudent(req, res) {
         {name,marks,subject}
       );
       if (!updatedStudent) {
-         res.status(400).json({ error:"could not update Student"  });
+         res.status(220).json({ error:"could not update Student"  });
          return
       }
       res.json({message:"student updated successfully",data:updatedStudent});
@@ -59,7 +66,7 @@ export async function deleteStudent(req,res){
    if(isDeleted){
     return res.status(201).json({message:"Student succesfully deleted "})
    }
-   return res.status(400).json({message:"student not deleted "})
+   return res.status(220).json({message:"student not deleted "})
   
 
   }
@@ -72,7 +79,7 @@ export async function deleteStudent(req,res){
 export async function searchStudents(req, res){
     const { query } = req.query;
     if (!query) {
-       res.status(400).json({ error: 'Query parameter is required' });
+       res.status(220).json({ error: 'Query parameter is required' });
        return
     }
   
@@ -94,7 +101,7 @@ export async function getStudent(req,res){
   try{
     let student = await getSingleDocument(Student,{_id:req?.params?.id})
     if(!student){
-      return res.status(404).json({message:"student not found"})
+      return res.status(220).json({message:"student not found"})
     }
     return res.status(200).json({messgae:"student found successfully",data:{name:student?.name,subject:student?.subject,marks:student?.marks}})
   }

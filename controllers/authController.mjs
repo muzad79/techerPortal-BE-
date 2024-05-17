@@ -15,7 +15,7 @@ export const register = async (req, res) => {
     const existingUser = await getSingleDocument(Teacher,{username})
 
     if (existingUser) {
-       res.status(400).json({ message:"Teacher already present" });
+       res.status(220).json({ message:"Teacher already present" });
        return
     }
 
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
     const user = await getSingleDocument(Teacher,{username})
 
     if (user == null) {
-      res.status(401).json({ message: "register first" });
+      res.status(220).json({ message: "register first" });
       return
     }
 
@@ -48,7 +48,7 @@ export const login = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-       res.status(401).json({ message:"invalid credentials" });
+       res.status(220).json({ message:"invalid credentials" });
        return
     }
 
@@ -78,7 +78,7 @@ export const newLogin = (req, res, next) => {
         return res.status(500).json({ error: 'internal server error' });
       }
       if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        return res.status(220).json({ message: 'Invalid credentials' });
       }
      
      

@@ -12,7 +12,7 @@ export const authenticate = (
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ message:"unauthorized access" });
+    return res.status(220).json({ message:"unauthorized access" });
   }
 
   try {
@@ -23,6 +23,6 @@ export const authenticate = (
     next();
   } catch (error) {
     logger.error('JWT verification failed', error);
-    res.status(401).json({ message:"internal server error"  });
+    res.status(220).json({ message:"internal server error"  });
   }
 };
